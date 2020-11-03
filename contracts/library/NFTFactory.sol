@@ -20,6 +20,7 @@ contract NFTFactory is Governance{
 
     struct NFT {
         bytes32 name;
+        address author;
         uint32 quality;
         uint32 level;
         uint dna;
@@ -56,12 +57,12 @@ contract NFTFactory is Governance{
     function _createNFT(address _address) internal returns(uint){
         uint dna = _generateRandomDNA(_address);
         uint32 quality = getRandomQuality();
-        NFT memory nft = NFT('no name',quality,(quality-1)*5+1,dna);
+        NFT memory nft = NFT('no name',_address,quality,(quality-1)*5+1,dna);
         NFTs.push(nft) ;
         NFTToOwner[NFTs.length -1] = _address;
         ownerNFTCount[_address] = ownerNFTCount[_address].add(1);
         emit newNFT(NFTs.length.sub(1),dna);
-        return NFTs.length;
+        return NFTs.length.sub(1);
     }
 
 

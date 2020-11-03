@@ -24,6 +24,7 @@ contract NFTOwnership is NFTHelper,ERC721{
         ownerNFTCount[_to] = ownerNFTCount[_to].add(1);
         ownerNFTCount[_from] = ownerNFTCount[_from].sub(1);
         NFTToOwner[_tokenId] = _to;
+        //NFTs[_tokenId].author = _to;
         emit Transfer(_from,_to,_tokenId);
     }
 

@@ -1,6 +1,5 @@
 pragma solidity ^0.5.0;
 
-import "./Lottery.sol";
 import "./NFTGame.sol";
 
 contract GameCore is NFTGame{
@@ -31,5 +30,11 @@ contract GameCore is NFTGame{
     function setUpQualityFee(uint _fee) external onlyGovernance {
         qualityUpFee = _fee;
     }
+
+    function xmptBalanceOf() external view returns (uint256){
+        return XMPT.balanceOf(msg.sender);
+    }
+
+
 
 }

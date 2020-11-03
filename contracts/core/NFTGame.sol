@@ -5,12 +5,12 @@ import "../library/NFTOwnership.sol";
 contract NFTGame is NFTOwnership{
 
     uint8 num = 5;
-    uint8 count = 0;
+    uint8 public count = 0;
     uint256 public nonce = 0;
     uint256 public playFee = 0.01 ether;
     uint256 winnerXMPTRewards = 500 * 1e18;
 
-    address public teamWallet = 0x3D0a845C5ef9741De999FC068f70E2048A489F2b;
+    address public teamWallet = 0x0f61A80aB19fe9aD0Dce03b6D4297521eC6Cf4f2;
     address[5] plays;
 
     mapping(uint => address) public nonceToWinner;
@@ -19,7 +19,7 @@ contract NFTGame is NFTOwnership{
 
     using SafeMath for uint;
 
-    function buyLottery() public payable {
+    function buyLottery() public payable returns(bool){
         require(msg.value >= playFee);
         require(count < num);
         require(joinRequire(msg.sender) == false);
@@ -28,6 +28,7 @@ contract NFTGame is NFTOwnership{
         if (count == num) {
             distributeRewards();
         }
+        return true;
     }
 
     function joinRequire(address _cormorant) private view returns(bool) {
@@ -55,14 +56,14 @@ contract NFTGame is NFTOwnership{
     function distributeLoser(address _winner) private returns(bool){
         for(uint i = 0;i<num; i++){
             if(plays[i] != _winner){
-                address(uint160(plays[i])).transfer(playFee * 6 / 5);
+                address(uint160(plays[i])).transfer(playFee.mul(11).div(10));
             }
         }
     }
 
     function distributeWinner(address _winner)private returns(bool){
-        address(uint160(_winner)).transfer(address(this).balance.div(2));
-        address(uint160(teamWallet)).transfer(address(this).balance.div(10));
+        //address(uint160(_winner)).transfer(address(this).balance.div(2));
+        address(uint160(teamWallet)).transfer(playFee.div(5));
         XMPT.transfer(_winner,winnerXMPTRewards);
         mint(_winner);
     }
